@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zodiac Atlas / 12 — Read the Night Differently</title>
+<meta name="description" content="An interactive 3D atlas of the twelve zodiac constellations. Pick your sign, explore its stars, ask the constellation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="brand"><span class="glyph-star">✦</span> ZODIAC ATLAS <span class="dim">/ 12</span></div>
+  <div class="navlinks">
+    <a href="#constellation"><span class="num">01</span> CONSTELLATION</a>
+    <a href="#signs"><span class="num">02</span> SIGNS</a>
+    <a href="#consult"><span class="num">03</span> CONSULT</a>
+  </div>
+</nav>
+
+<header class="hero" id="constellation">
+  <p class="eyebrow">YOUR SIGN IS A DOORWAY</p>
+  <h1>READ THE <span class="accent">NIGHT</span><br>DIFFERENTLY.</h1>
+
+  <div class="viewer-wrap">
+    <div class="viewer-meta">
+      <span id="sectorLabel">SECTOR 08 / SCORPIO</span>
+      <span class="live-dot">● LIVE SKY</span>
+    </div>
+    <div class="viewer">
+      <canvas id="sky"></canvas>
+      <div class="sign-badge" id="signBadge">
+        <span class="badge-glyph" id="badgeGlyph">♏</span>
+        <span class="badge-text"><strong id="badgeName">SCORPIO</strong><em id="badgeElem">WATER</em></span>
+      </div>
+      <div class="viewer-controls">
+        <button id="btnPause" type="button">PAUSE</button>
+        <button id="btnAmbience" type="button" class="on">AMBIENCE ON</button>
+        <button id="btnReset" type="button">RESET</button>
+      </div>
+      <div class="orbit-track"><span id="orbitLabel">ORBIT 08 / 12</span><div class="orbit-bar"><i id="orbitFill"></i></div></div>
+    </div>
+    <p class="hint">Select a sign below — the constellation redraws itself.</p>
+  </div>
+</header>
+
+<section class="editorial">
+  <div class="rule"></div>
+  <h2>THE SKY <span class="accent">KEEPS SCORE.</span></h2>
+  <p class="lede">Twelve constellations. Twelve ways of noticing. Each sign is a language
+  for the patterns above you — pick yours and watch its stars take shape.</p>
+  <div class="rule"></div>
+</section>
+
+<section class="signs" id="signs">
+  <h2 class="section-title"><span class="accent">YOUR SIGN.</span></h2>
+  <div class="grid" id="signGrid"></div>
+</section>
+
+<section class="consult" id="consult">
+  <h2 class="section-title"><span class="accent">ASK THE CONSTELLATION.</span></h2>
+  <p class="lede">A private reading, written in starlight. Leave your question — the sky answers in its own time.</p>
+  <form id="consultForm" class="consult-form">
+    <label>NAME<input type="text" id="fName" required placeholder="Your name"></label>
+    <label>EMAIL<input type="email" id="fEmail" required placeholder="you@example.com"></label>
+    <label>QUESTION<textarea id="fQuestion" required rows="4" placeholder="What do you want the stars to weigh in on?"></textarea></label>
+    <button type="submit">ASK THE CONSTELLATION</button>
+    <p class="form-note" id="formNote"></p>
+  </form>
+</section>
+
+<footer>
+  <div class="rule"></div>
+  <p><span class="glyph-star">✦</span> ZODIAC ATLAS / 12 — read the night differently.</p>
+  <p class="dim">An interactive star atlas. Constellations shown are stylized, not to astronomical scale.</p>
+</footer>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
