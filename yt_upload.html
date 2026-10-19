@@ -1,0 +1,37 @@
+<!doctype html><html><body>
+<h3>YouTube Uploader</h3>
+<input type="file" id="f" accept="video/mp4"><button id="go">Upload</button>
+<pre id="out">select the video file, then click Upload</pre>
+<script>
+const q = new URLSearchParams(location.search);
+const out = document.getElementById("out");
+const BOUNDARY = "muse_upload_boundary_12345";
+document.getElementById("go").onclick = async () => {
+  const file = document.getElementById("f").files[0];
+  if (!file) { out.textContent = "NO_FILE"; return; }
+  const meta = {
+    snippet: {title: q.get("title"), description: q.get("desc"),
+              tags: (q.get("tags")||"").split(",").map(s=>s.trim()).filter(Boolean),
+              categoryId: q.get("cat")},
+    status: {privacyStatus: "public", selfDeclaredMadeForKids: false}
+  };
+  const buf = new Uint8Array(await file.arrayBuffer());
+  const enc = new TextEncoder();
+  const head = enc.encode("--"+BOUNDARY+"\r\nContent-Type: application/json\r\n\r\n"+JSON.stringify(meta)+"\r\n--"+BOUNDARY+"\r\nContent-Type: video/mp4\r\n\r\n");
+  const tail = enc.encode("\r\n--"+BOUNDARY+"--");
+  const body = new Blob([head, buf, tail]);
+  out.textContent = "uploading " + (body.size/1048576).toFixed(1) + " MB...";
+  try {
+    for (const host of ["https://www.googleapis.com", "https://youtube.googleapis.com"]) {
+      try {
+        const r = await fetch(host + "/upload/youtube/v3/videos?uploadType=multipart&part=snippet,status",
+          {method: "POST", headers: {Authorization: "Bearer "+q.get("token"),
+            "Content-Type": "multipart/related; boundary="+BOUNDARY}, body});
+        const t = await r.text();
+        out.textContent = "HTTP " + r.status + " via " + host + "\n" + t.slice(0, 2000);
+        if (r.status === 200) break;
+      } catch(e) { out.textContent = "tried " + host + ": " + e.message; }
+    }
+  } catch(e) { out.textContent = "FETCH_ERROR: " + e.message; }
+};
+</script></body></html>
